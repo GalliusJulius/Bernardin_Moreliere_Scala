@@ -58,8 +58,7 @@ object Main_Morelie {
       case Animal(nom:String) => {
         if(it.next() == "o") a
         else {
-          println("J'ai perdu - quelle est la bonne réponse?")
-          //PAS BON (TROUVER UN MOYEN) 
+          println("J'ai perdu - quelle est la bonne réponse?") 
           val rep = it.next()
           println("Quelle question permet de différencier "+ rep +" de "+nom)
           val ques = it.next()
@@ -77,7 +76,6 @@ object Main_Morelie {
    
       /**
      * Fonction permettant de créer un arbre par rapport à un fichier
-     * TODO
      */
     def fichierToAnBanimal(nomf:String) : ABanimal = {
       def analyseListe(contenu : Iterator[String]) :ABanimal = {
@@ -92,6 +90,9 @@ object Main_Morelie {
       analyseListe(Source.fromFile(nomf).getLines)
     }
     
+    /**
+     * Fonction qui va générer un fichier nommé nomf à partir d'un arbre d'animal
+     */
     def abanimalToFichier(nomf :String, a :ABanimal) : Unit ={
         def generationTexte(ani : ABanimal) :String = {
             ani match {
@@ -106,6 +107,35 @@ object Main_Morelie {
         val writer = new FileWriter(new File(""+nomf))
         writer.write(generationTexte(a))
         writer.close()
+    }
+    
+    def jeuSimpleJnsp(a : ABanimal, it :Iterator[String]) :Boolean = {
+      def generationSousArbres(ls :List[ABanimal], it :Iterator[String]) : Boolean ={
+        ls match {
+          case Question(q : String,o:ABanimal,n:ABanimal)::_ => {
+            println(q)
+            val res = it.next()
+            if(res=="o") generationSousArbres(o::Nil,it)
+            else if(res=="n")  generationSousArbres(n::Nil,it)
+            else generationSousArbres(List(o,n),it)
+          }
+          case Animal(nom:String)::n =>{
+            println("Pensez-vous à :"+nom+" ?")
+            if(it.next=="o"){
+               printf("J'ai gagné")
+               true
+            }
+            else{
+               generationSousArbres(n,it)
+            }
+          }
+          case Nil =>{
+            println("J'ai perdu!")
+            false
+          }
+        }
+      }
+      generationSousArbres(a::Nil,it)
     }
     
   def main(args: Array[String]) {
@@ -137,7 +167,9 @@ object Main_Morelie {
     println("Test de la création d'un fichier")
     abanimalToFichier("test2",a)
     println("Test de la création par rapport à un fichier")
-    println(fichierToAnBanimal("test1"))
-    
+    println(fichierToAnBanimal("test2"))
+    val it6 = Iterator("n","x","n","n")
+    println("Test pour la génération du je sais pas")
+    println(jeuSimpleJnsp(a,it6))
   }
 }
