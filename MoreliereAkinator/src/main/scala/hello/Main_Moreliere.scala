@@ -2,6 +2,9 @@ package hello
 import scala.io.Source
 import java.io._
 
+/**
+ * Programme principale du scala
+ */
 object Main_Morelie {
    /**
      * Type de n'importe quel élément de l'arbre
@@ -17,7 +20,7 @@ object Main_Morelie {
     case class Question(q:String, o:ABanimal, n :ABanimal) extends ABanimal
   
   /**
-   * function éxécutant le jeu 
+   * Question 1 : function éxécutant le jeu de manière simple
    */
   def jeuSimple(a:ABanimal, it : Iterator[String]) : Boolean = {
     a match {
@@ -35,7 +38,7 @@ object Main_Morelie {
   }
     
     /**
-     * Permet d'éxécuter le jeu tout en gardant les logs des réponses du joueur dans une liste
+     * Question 2 : Permet d'éxécuter le jeu tout en gardant les logs des réponses du joueur dans une liste
      */    
     def jeuLog (a:ABanimal, it :Iterator[String]) : List[String] ={
       a match {
@@ -51,7 +54,7 @@ object Main_Morelie {
     }
     
     /**
-     * Permet de faire un jeu qui va ajouter les éléments qu'il ne trouve pas dans son arbre
+     * Question 3 : Permet de faire un jeu qui va ajouter les éléments qu'il ne trouve pas dans son arbre quand il ne trouve pas
      */
     def jeuApprentissage(a : ABanimal, it : Iterator[String]) : ABanimal = {
       a match {
@@ -64,7 +67,7 @@ object Main_Morelie {
           println("Quelle question permet de différencier "+ rep +" de "+nom)
           val ques = it.next()
           println("Quelle est la réponse à cette question pour "+rep)
-          if(it.next()=="y") Question(ques,Animal(rep),a)
+          if(it.next()=="o") Question(ques,Animal(rep),a)
           else Question(ques,a,Animal(rep))
         }
       }
@@ -76,8 +79,8 @@ object Main_Morelie {
     }
    }
    
-      /**
-     * Fonction permettant de créer un arbre par rapport à un fichier
+     /**
+     * Question 4 : Fonction permettant de créer un arbre par rapport à un fichier
      */
     def fichierToAnBanimal(nomf:String) : ABanimal = {
       def analyseListe(contenu : Iterator[String]) :ABanimal = {
@@ -93,7 +96,7 @@ object Main_Morelie {
     }
     
     /**
-     * Fonction qui va générer un fichier nommé nomf à partir d'un arbre d'animal
+     * Question 5 : Fonction qui va générer un fichier nommé nomf à partir d'un arbre d'animal
      */
     def abanimalToFichier(nomf :String, a :ABanimal) : Unit ={
         def generationTexte(ani : ABanimal) :String = {
@@ -113,7 +116,7 @@ object Main_Morelie {
     
     
     /**
-     * Fonction implémentant la fonction je ne sais pas 
+     * Question 6 : Fonction implémentant la fonction je ne sais pas 
      */
     def jeuSimpleJnsp(a : ABanimal, it :Iterator[String]) :Boolean = {
       def generationSousArbres(ls :List[ABanimal], it :Iterator[String]) : Boolean ={
@@ -143,52 +146,49 @@ object Main_Morelie {
       }
       generationSousArbres(a::Nil,it)
     }
-    
-    def jouerApprentissage(a: ABanimal, it:Iterator[String]) : Unit = {
-      println("Début de la partie en apprentissage")
-      val arbre = jeuApprentissage(a,Source.stdin.getLines)
-      println("Voulez-vous continuer?")
-      if(it.next()=="o")
-          jeuApprentissage(arbre,Source.stdin.getLines)
+   
+   /**
+    * Fonction permettant de lancer le jeu en boucle avec un mode défini 
+    */
+   def jouerJeu(a: ABanimal, it:Iterator[String],mode : String) : Unit = {
+        println("Début de la partie")
+        mode match{
+          case "1" =>{ val arbre = jeuApprentissage(a,Source.stdin.getLines)
+                       println("Voulez-vous continuer?")
+                       if(it.next()=="o")
+                            jouerJeu(arbre,Source.stdin.getLines,"")}
+          case "2" =>{ val trouve = jeuSimple(a,it)
+                       if(trouve) println("J'ai trouvé :D")
+                       else println("Oh nan je n'ai pas trouvé!")
+                       }       
+          case "3" =>{ 
+                 val trouve = jeuSimpleJnsp(a,it)
+                       if(trouve) println("J'ai trouvé :D")
+                       else println("Oh nan je n'ai pas trouvé!")
+            }
+        }
+        println("Voulez-vous continuer?")
+        if(it.next()=="o")
+            println("Voulez vous changer de mode?")
+            if(it.next()=="o") jouerJeu(a,Source.stdin.getLines,changerMode(it))
+            else jouerJeu(a,Source.stdin.getLines,""+mode)
     }
+   
+   /**
+    * Méthode permettant de changer le mode
+    */
+   def changerMode(it:Iterator[String]) : String ={
+     println("Quel mode voulez-vous jouer? Apprentissage, simple, je sais pas (1,2,3)")
+     it.next()
+   }
     
-  def main(args: Array[String]) {
-    println("Bienvenue dans le jeu akinator")
-    val arbre = fichierToAnBanimal("test2")
-    jouerApprentissage(arbre,Source.stdin.getLines)
-    println("Merci d'avoir joué")
-    /**
-    println("TestJeuSimple")
-    val a = Question("Est-ce qu'il a des ailes ?",
-              Question("Est-ce qu'il a des plumes ?",
-                  Question("Est-ce qu'il a un goitre ?",
-                    Animal("Pélican"),Animal("Pigeon")),
-                  Question("Est-ce qu'il a des poils ?",
-                    Animal("Chauve-souris"),Animal("Ptérodactyle"))),
-            Question("Est-ce qu'il ronronne ?",
-              Animal("Chat"),Animal("Chien"))) 
-    //Lion
-    val it = Iterator("n","o","n")
-    println(jeuSimple(a,it))
-    //Chien
-    val it2 = Iterator("n","n","o")
-    println(jeuSimple(a,it2))
-    val it3 = Iterator("o","o","o","o")
-    println(jeuSimple(a,it3))
-    
-    println("TestJeuLog")
-    val it4 = Iterator("n","n","n")
-    println(jeuLog(a,it4))
-    println("Test apprentissage")
-    println(a);
-    val it5 = Iterator("n","o","n","Lion","Est-ce qu'il a une crinière?","o")
-    println(jeuApprentissage(a,it5)); 
-    println("Test de la création d'un fichier")
-    abanimalToFichier("test2",a)
-    println("Test de la création par rapport à un fichier")
-    println(fichierToAnBanimal("test2"))
-    val it6 = Iterator("n","x","n","n")
-    println("Test pour la génération du je sais pas")
-    println(jeuSimpleJnsp(a,it6))*/
+   /**
+    * Main qui lance le jeu tant que l'utilisateur veut jouer
+    */
+   def main(args: Array[String]) {
+     println("Bienvenue dans le jeu akinator")
+     val arbre = fichierToAnBanimal("test2")
+     jouerJeu(arbre,Source.stdin.getLines,"")
+     println("Merci d'avoir joué")
   }
 }
