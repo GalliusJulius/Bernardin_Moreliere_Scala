@@ -56,6 +56,7 @@ object Main_Morelie {
     def jeuApprentissage(a : ABanimal, it : Iterator[String]) : ABanimal = {
       a match {
       case Animal(nom:String) => {
+        println("Est-ce que c'est "+nom+"?")
         if(it.next() == "o") a
         else {
           println("J'ai perdu - quelle est la bonne réponse?") 
@@ -68,6 +69,7 @@ object Main_Morelie {
         }
       }
       case Question(q : String, o : ABanimal,n:ABanimal) => {
+        println(q)
         if(it.next()=="o") Question(q,jeuApprentissage(o,it),n)
         else Question(q,o,jeuApprentissage(n,it))
       }
@@ -109,6 +111,10 @@ object Main_Morelie {
         writer.close()
     }
     
+    
+    /**
+     * Fonction implémentant la fonction je ne sais pas 
+     */
     def jeuSimpleJnsp(a : ABanimal, it :Iterator[String]) :Boolean = {
       def generationSousArbres(ls :List[ABanimal], it :Iterator[String]) : Boolean ={
         ls match {
@@ -138,7 +144,20 @@ object Main_Morelie {
       generationSousArbres(a::Nil,it)
     }
     
+    def jouerApprentissage(a: ABanimal, it:Iterator[String]) : Unit = {
+      println("Début de la partie en apprentissage")
+      val arbre = jeuApprentissage(a,Source.stdin.getLines)
+      println("Voulez-vous continuer?")
+      if(it.next()=="o")
+          jeuApprentissage(arbre,Source.stdin.getLines)
+    }
+    
   def main(args: Array[String]) {
+    println("Bienvenue dans le jeu akinator")
+    val arbre = fichierToAnBanimal("test2")
+    jouerApprentissage(arbre,Source.stdin.getLines)
+    println("Merci d'avoir joué")
+    /**
     println("TestJeuSimple")
     val a = Question("Est-ce qu'il a des ailes ?",
               Question("Est-ce qu'il a des plumes ?",
@@ -170,6 +189,6 @@ object Main_Morelie {
     println(fichierToAnBanimal("test2"))
     val it6 = Iterator("n","x","n","n")
     println("Test pour la génération du je sais pas")
-    println(jeuSimpleJnsp(a,it6))
+    println(jeuSimpleJnsp(a,it6))*/
   }
 }
