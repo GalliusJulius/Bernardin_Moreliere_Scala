@@ -5,7 +5,7 @@ import java.io._
 /**
  * Programme principale du scala
  */
-object Main_Morelie {
+object Main_Moreliere {
    /**
      * Type de n'importe quel élément de l'arbre
     */
@@ -188,7 +188,7 @@ object Main_Morelie {
    def main(args: Array[String]) {
      println("Bienvenue dans le jeu akinator")
      val arbre = fichierToAnBanimal("test2")
-     jouerJeu(arbre,Source.stdin.getLines,"")
+     jouerJeu(arbre,Source.stdin.getLines,changerMode(Source.stdin.getLines))
      println("Merci d'avoir joué")
   }
 }
