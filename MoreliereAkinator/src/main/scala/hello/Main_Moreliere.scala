@@ -152,11 +152,9 @@ object Main_Moreliere {
     */
    def jouerJeu(a: ABanimal, it:Iterator[String],mode : String) : Unit = {
         println("Début de la partie")
+        //on cherche le mode actuel
         mode match{
-          case "1" =>{ val arbre = jeuApprentissage(a,Source.stdin.getLines)
-                       println("Voulez-vous continuer?")
-                       if(it.next()=="o")
-                            jouerJeu(arbre,Source.stdin.getLines,"")}
+          case "1" =>{ val arbre = jeuApprentissage(a,Source.stdin.getLines)}
           case "2" =>{ val trouve = jeuSimple(a,it)
                        if(trouve) println("J'ai trouvé :D")
                        else println("Oh nan je n'ai pas trouvé!")
@@ -167,11 +165,14 @@ object Main_Moreliere {
                        else println("Oh nan je n'ai pas trouvé!")
             }
         }
+        //fin d'éxécution
         println("Voulez-vous continuer?")
-        if(it.next()=="o")
+        if(it.next()=="o"){
             println("Voulez vous changer de mode?")
             if(it.next()=="o") jouerJeu(a,Source.stdin.getLines,changerMode(it))
             else jouerJeu(a,Source.stdin.getLines,""+mode)
+        }
+        else println("Merci d'avoir joué!")
     }
    
    /**
@@ -189,6 +190,5 @@ object Main_Moreliere {
      println("Bienvenue dans le jeu akinator")
      val arbre = fichierToAnBanimal("test2")
      jouerJeu(arbre,Source.stdin.getLines,changerMode(Source.stdin.getLines))
-     println("Merci d'avoir joué")
   }
 }
