@@ -1,8 +1,9 @@
 
 package hello
 
-import org.scalatest._
 import Main_Moreliere._
+import org.scalatest._
+import org.scalactic.source.Position.apply
 
 class TestAkinator extends FunSuite {
   
@@ -22,6 +23,8 @@ class TestAkinator extends FunSuite {
                                 
   val fichierAnBanimal = Question("q:Est-ce qu’il a des ailes ?",Question("q:Est-ce qu’il a des plumes ?",Animal("Pélican"),Animal("Chauve-souris")),Animal("Chien"))
   val arbreAnimalFichier = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien"))
+  
+  val arbreJnsp = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Question("Est-ce qu'il a un goitre ?",Animal("Pélican"),Animal("Pigeon")),Question("Est-ce qu'il a des poils ?",Animal("Chauve-souris"),Animal("Ptérodactyle"))),Animal("Chien"))
 
   
   /**
@@ -85,5 +88,13 @@ class TestAkinator extends FunSuite {
     abanimalToFichier("test3",arbreAnimalFichier)
     assert(fichierToAnBanimal("test3")===Question("q:Est-ce qu'il a des ailes ?",Question("q:Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien")))
   }
+  
+  /*
+   * test le mode de jeu 'je ne sais pas'
+   */
+  
+   test("je ne sais pas"){
+     assert(jeuSimpleJnsp(arbreJnsp,"o\nrand\njnsp\nn\no\no\no\n".lines)==true)
+   }
   
 }
