@@ -10,7 +10,10 @@ class TestAkinator extends FunSuite {
   val nonAttendu = List("n","o","o","o")
   val arbreApprentiDepart = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien"))
   val arbreApprentiArrive = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Question("Est-ce qu'il a un goitre ?",Animal("Pelican"),Animal("pigeon")),Animal("chauve-souris")),Animal("chien"))
+  val fichierAnBanimal = Question("q:Est-ce qu’il a des ailes ?",Question("q:Est-ce qu’il a des plumes ?",Animal("Pélican"),Animal("Chauve-souris")),Animal("Chien"))
+  val arbreAnimalFichier = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien"))
 
+  
   
   /*
    * Test si la methode jeuSimple renvoi bien vrai si l'utilisateur entre "o"
@@ -58,4 +61,21 @@ class TestAkinator extends FunSuite {
   test("jeu apprentissage"){
     assert(jeuApprentissage(arbreApprentiDepart,"o\no\nn\npigeon\nEst-ce qu'il a un goitre ?\nn".lines)===arbreApprentiArrive)
   }
+  
+  /*
+   * test lire un fichier qui créer l'arbre
+   */
+  test("fichierToAnBanimal"){
+    assert(fichierToAnBanimal("test1")===fichierAnBanimal)
+  }
+  
+  /*
+   * test ecrire un arbre dans un fichier
+   */
+  test("AnBanimalToFichier"){
+    abanimalToFichier("test3",arbreAnimalFichier)
+    assert(fichierToAnBanimal("test3")===Question("q:Est-ce qu'il a des ailes ?",Question("q:Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien")))
+  }
+  
+  
 }
