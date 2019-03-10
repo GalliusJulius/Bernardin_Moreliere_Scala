@@ -1,3 +1,4 @@
+
 package hello
 
 import org.scalatest._
@@ -8,14 +9,22 @@ class TestAkinator extends FunSuite {
   
   val attendu = List("n","o","o")
   val nonAttendu = List("n","o","o","o")
-  val arbreApprentiDepart = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien"))
-  val arbreApprentiArrive = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Question("Est-ce qu'il a un goitre ?",Animal("Pelican"),Animal("pigeon")),Animal("chauve-souris")),Animal("chien"))
+  val arbreApprentiDepart = Question("Est-ce qu'il a des ailes ?"
+                              ,Question("Est-ce qu'il a des plumes ?"
+                                   ,Animal("pigeon"),Animal("chauve-souris"))
+                              ,Animal("chien"))
+  val arbreApprentiArrive = Question("Est-ce qu'il a des ailes ?"
+                               ,Question("Est-ce qu'il a des plumes ?"
+                                    ,Question("Est-ce qu'il a un goitre ?"
+                                        ,Animal("Pelican"),Animal("pigeon"))
+                                    ,Animal("chauve-souris"))
+                                ,Animal("chien"))
+                                
   val fichierAnBanimal = Question("q:Est-ce qu’il a des ailes ?",Question("q:Est-ce qu’il a des plumes ?",Animal("Pélican"),Animal("Chauve-souris")),Animal("Chien"))
   val arbreAnimalFichier = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien"))
 
   
-  
-  /*
+  /**
    * Test si la methode jeuSimple renvoi bien vrai si l'utilisateur entre "o"
    */
   test("jeu simple vrai"){
@@ -23,7 +32,7 @@ class TestAkinator extends FunSuite {
   }
   
   
-  /*
+  /**
    * Test si la methode jeuSimple renvoi bien faux si l'utilisateur entre "n"
    */
   test("jeu simple faux"){
@@ -32,7 +41,7 @@ class TestAkinator extends FunSuite {
   
  
    
-  /*
+  /**
    * Test le resultat de la methode jeuSimple lorsqu'on effectue une succession de réponses
    */
   test("jeu simple question"){
@@ -40,7 +49,7 @@ class TestAkinator extends FunSuite {
   }
    
   
-   /*
+   /**
    * Test le resultat de jeu log avec une liste attendue
    */
     test("jeu log"){
@@ -48,18 +57,18 @@ class TestAkinator extends FunSuite {
     }
   
     
-  /*
+  /**
    * test jeu log et attend une erreur 
    */
   test("jeu log errone"){
        assert(jeuLog(Question("Est-ce qu'il a des ailes ?",Animal("pigeon"),Question("Est-ce qu'il ronronne ?",Animal("chat"),Animal("chien"))),"n\no\no\no\nn".lines)!=nonAttendu)
   }
   
-  /*
-   * test jeu apprentissage
+  /**
+   * test jeu apprentissage : ajout d'un élément (Pélican oui à la réponse Est-ce qu'il a un goitre)
    */
   test("jeu apprentissage"){
-    assert(jeuApprentissage(arbreApprentiDepart,"o\no\nn\npigeon\nEst-ce qu'il a un goitre ?\nn".lines)===arbreApprentiArrive)
+    assert(jeuApprentissage(arbreApprentiDepart,"o\no\nn\nPelican\nEst-ce qu'il a un goitre ?\no".lines)===arbreApprentiArrive)
   }
   
   /*
@@ -76,6 +85,5 @@ class TestAkinator extends FunSuite {
     abanimalToFichier("test3",arbreAnimalFichier)
     assert(fichierToAnBanimal("test3")===Question("q:Est-ce qu'il a des ailes ?",Question("q:Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien")))
   }
-  
   
 }
