@@ -61,7 +61,7 @@ class TestAkinator extends FunSuite {
   }
   
   /**
-   * test jeu apprentissage : ajout d'un élément (Pélican oui à la réponse Est-ce qu'il a un goitre)
+   * test jeu apprentissage : ajout d'un élément (Pélican oui à la réponse Est-ce qu'il a un goitre	)
    */
   test("jeu apprentissage"){
     assert(jeuApprentissage(arbreApprentiDepart,"o\no\nn\nPelican\nEst-ce qu'il a un goitre ?\no".lines)===arbreApprentiArrive)
