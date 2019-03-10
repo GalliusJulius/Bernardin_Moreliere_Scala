@@ -1,7 +1,7 @@
 
-package hello
+package test
 
-import Main_Moreliere._
+import hello.Main_Moreliere._
 import org.scalatest._
 import org.scalactic.source.Position.apply
 
@@ -80,6 +80,15 @@ class TestAkinator extends FunSuite {
   test("fichierToAnBanimal"){
     assert(fichierToAnBanimal("test1")===fichierAnBanimal)
   }
+  
+  /*
+   * test lire un fichier qui n'existe pas 
+   */
+  //test("fichierToAnBanimalFaux"){
+    //assertThrows(FileNotFoundException){
+      //fichierToAnBanimal("test12343")===fichierAnBanimal
+    //}
+  //}
   
   /*
    * test ecrire un arbre dans un fichier
