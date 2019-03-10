@@ -6,6 +6,10 @@ import org.scalatest._
 import org.scalactic.source.Position.apply
 import java.io.FileNotFoundException
 
+/**
+ * Permet de tester l'akinator
+ *
+ */
 class TestAkinator extends FunSuite {
   
   
@@ -21,7 +25,10 @@ class TestAkinator extends FunSuite {
                                         ,Animal("Pelican"),Animal("pigeon"))
                                     ,Animal("chauve-souris"))
                                 ,Animal("chien"))
-                                
+  val arbreApprentiDeux = Question("Est-ce qu'il a des ailes ?"
+                              ,Question("Est-ce qu'il a des plumes ?"
+                                   ,Animal("pigeon"),Animal("chauve-souris"))
+                              ,Question("Est-ce qu'il aboi ?",Animal("chien"),Animal("Chat")))                           
   val fichierAnBanimal = Question("q:Est-ce qu’il a des ailes ?",Question("q:Est-ce qu’il a des plumes ?",Animal("Pélican"),Animal("Chauve-souris")),Animal("Chien"))
   val arbreAnimalFichier = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien"))
   
@@ -75,14 +82,21 @@ class TestAkinator extends FunSuite {
     assert(jeuApprentissage(arbreApprentiDepart,"o\no\nn\nPelican\nEst-ce qu'il a un goitre ?\no".lines)===arbreApprentiArrive)
   }
   
-  /*
+  /**
+   * test jeu apprentissage : ajout d'un élément (Chat non à la réponse Est-ce qu'il aboi	)
+   */
+  test("jeu apprentissage2"){
+    assert(jeuApprentissage(arbreApprentiDepart,"n\nn\nChat\nEst-ce qu'il aboi ?\nn".lines)===arbreApprentiDeux)
+  }
+  
+  /**
    * test lire un fichier qui créer l'arbre
    */
   test("fichierToAnBanimal"){
     assert(fichierToAnBanimal("test1")===fichierAnBanimal)
   }
   
-  /*
+  /**
    * test lire un fichier qui n'existe pas 
    */
   test("fichierToAnBanimalFaux"){
@@ -91,7 +105,7 @@ class TestAkinator extends FunSuite {
     }
   }
   
-  /*
+  /**
    * test ecrire un arbre dans un fichier
    */
   test("AnBanimalToFichier"){
@@ -99,12 +113,19 @@ class TestAkinator extends FunSuite {
     assert(fichierToAnBanimal("test3")===Question("q:Est-ce qu'il a des ailes ?",Question("q:Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien")))
   }
   
-  /*
-   * test le mode de jeu 'je ne sais pas'
+  /**
+   * Vérification qu'il donne bien la meme chose qu'avec un jeu simple
    */
-  
-   test("je ne sais pas"){
-     assert(jeuSimpleJnsp(arbreJnsp,"o\nrand\njnsp\nn\no\no\no\n".lines)==true)
+  test("je ne sais pas 1"){
+     assert(jeuSimpleJnsp(Question("Est-ce qu'il a des ailes ?",Animal("pigeon"),Question("Est-ce qu'il ronronne ?",Animal("chat"),Animal("chien"))),"n\no\no\n".lines)==true)
    }
   
+  /**
+   * test le mode de jeu 'je ne sais pas'
+   */
+   test("je ne sais pas 2"){
+     assert(jeuSimpleJnsp(arbreJnsp,"o\nx\nx\nn\no\no\no\n".lines)==true)
+   }
+  
+   
 }
