@@ -92,7 +92,7 @@ object Main_Moreliere {
           Animal(temp)
         }
       }
-      analyseListe(Source.fromFile(nomf).getLines)
+        analyseListe(Source.fromFile(nomf).getLines)
     }
     
     /**

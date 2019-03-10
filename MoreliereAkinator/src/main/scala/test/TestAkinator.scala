@@ -1,7 +1,10 @@
-package hello
 
+package test
+
+import hello.Main_Moreliere._
 import org.scalatest._
-import Main_Moreliere._
+import org.scalactic.source.Position.apply
+import java.io.FileNotFoundException
 
 class TestAkinator extends FunSuite {
   
@@ -18,6 +21,11 @@ class TestAkinator extends FunSuite {
                                         ,Animal("Pelican"),Animal("pigeon"))
                                     ,Animal("chauve-souris"))
                                 ,Animal("chien"))
+                                
+  val fichierAnBanimal = Question("q:Est-ce qu’il a des ailes ?",Question("q:Est-ce qu’il a des plumes ?",Animal("Pélican"),Animal("Chauve-souris")),Animal("Chien"))
+  val arbreAnimalFichier = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien"))
+  
+  val arbreJnsp = Question("Est-ce qu'il a des ailes ?",Question("Est-ce qu'il a des plumes ?",Question("Est-ce qu'il a un goitre ?",Animal("Pélican"),Animal("Pigeon")),Question("Est-ce qu'il a des poils ?",Animal("Chauve-souris"),Animal("Ptérodactyle"))),Animal("Chien"))
 
   
   /**
@@ -66,5 +74,37 @@ class TestAkinator extends FunSuite {
   test("jeu apprentissage"){
     assert(jeuApprentissage(arbreApprentiDepart,"o\no\nn\nPelican\nEst-ce qu'il a un goitre ?\no".lines)===arbreApprentiArrive)
   }
+  
+  /*
+   * test lire un fichier qui créer l'arbre
+   */
+  test("fichierToAnBanimal"){
+    assert(fichierToAnBanimal("test1")===fichierAnBanimal)
+  }
+  
+  /*
+   * test lire un fichier qui n'existe pas 
+   */
+  test("fichierToAnBanimalFaux"){
+    intercept[FileNotFoundException]{
+      fichierToAnBanimal("test12343")===fichierAnBanimal
+    }
+  }
+  
+  /*
+   * test ecrire un arbre dans un fichier
+   */
+  test("AnBanimalToFichier"){
+    abanimalToFichier("test3",arbreAnimalFichier)
+    assert(fichierToAnBanimal("test3")===Question("q:Est-ce qu'il a des ailes ?",Question("q:Est-ce qu'il a des plumes ?",Animal("pigeon"),Animal("chauve-souris")),Animal("chien")))
+  }
+  
+  /*
+   * test le mode de jeu 'je ne sais pas'
+   */
+  
+   test("je ne sais pas"){
+     assert(jeuSimpleJnsp(arbreJnsp,"o\nrand\njnsp\nn\no\no\no\n".lines)==true)
+   }
   
 }
